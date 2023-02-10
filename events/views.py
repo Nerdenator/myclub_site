@@ -4,6 +4,12 @@ from datetime import date
 import calendar
 from calendar import HTMLCalendar
 
+from .models import Event
+
+def all_events(request):
+    event_list = Event.objects.all()
+    return render(request, 'events/event_list.html', {'event_list': event_list})
+
 
 def index(request, year=date.today().year, month=date.today().month):
     year = int(year)
@@ -12,4 +18,4 @@ def index(request, year=date.today().year, month=date.today().month):
     month_name = calendar.month_name[month]
     title = "MyClub Events Calendar - %s %s" % (month_name, year)
     cal = HTMLCalendar().formatmonth(year, month)
-    return HttpResponse("<h1>%s</h1><p>%s</p>" % (title, cal))
+    return render(request, 'events/calendar_base.html', {'title': title, 'cal': cal})
